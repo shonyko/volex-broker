@@ -67,8 +67,8 @@ io.on('connection', socket => {
 		socket.broadcast.emit(event, data);
 	});
 
-	socket.on(Events.MESSAGE, (json, cb) => {
-		if (json == null) {
+	socket.on(Events.MESSAGE, (msg, cb) => {
+		if (msg == null) {
 			console.log(
 				`Rejecting null message from socket [${socket.id}], service [${socket.service}]`
 			);
@@ -77,9 +77,8 @@ io.on('connection', socket => {
 				err: 'Message should not be null',
 			});
 		}
-		// msg = JSON.parse(json);
-		msg = json;
-		if (!msg.to) {
+		const { to, event, data } = msg;
+		if (!to) {
 			console.log(
 				`Rejecting message from socket [${socket.id}], service [${socket.service}]`
 			);
@@ -88,17 +87,8 @@ io.on('connection', socket => {
 				err: 'Message should contain at least the destination',
 			});
 		}
-		// console.log('msg: ', msg);
-		services
-			.get(msg.to)
-			?.emit(Events.MESSAGE, { cmd: msg.cmd, data: msg?.data }, res =>
-				cb?.(res)
-			);
-		console.log(
-			`MSG [${msg?.from ?? socket.service}] -> [${msg.to}]: [${msg.cmd}] ${
-				msg.data
-			}`
-		);
+		services.get(to)?.emit(event, data, res => cb?.(res));
+		console.log(`MSG [${socket.service}] -> [${to}]: [${event}] `, data);
 	});
 
 	console.log(`New socket: ${socket.id}`);
