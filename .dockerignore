@@ -1,0 +1,6 @@
+.idea
+node_modules
+.gitignore
+LICENSE
+Dockerfile
+docker-compose.yml

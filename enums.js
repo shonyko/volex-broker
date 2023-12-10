@@ -10,7 +10,7 @@ const Events = Object.freeze({
 	PING: 'ping',
 	PONG: 'pong',
 	MESSAGE: 'msg',
-	EVENT: 'event',
+	BROADCAST: 'event',
 });
 
 const Services = Object.freeze({

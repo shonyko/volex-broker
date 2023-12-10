@@ -62,7 +62,8 @@ io.on('connection', socket => {
 		console.log(`Service [${socket.service}] has been disconnected`);
 	});
 
-	socket.on(Events.EVENT, ({ event, data }) => {
+	socket.on(Events.BROADCAST, ({ event, data }) => {
+		console.log(`Broadcasting [${event}] from [${socket.service}]: `, data);
 		socket.broadcast.emit(event, data);
 	});
 
